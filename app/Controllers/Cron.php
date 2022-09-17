@@ -11,14 +11,5 @@
             
             return view('cron/count_random_input_output');
         }
-        
-        public function agregate_input_output_hours()
-        {
-            $inputs_outputs_hours_model = new \App\Models\InputsOutputsHoursModel;
-            
-            $inputs_outputs_hours_model->agregate();
-            
-            return view('cron/agregate_input_output_hours');
-        }
     }
 ?>

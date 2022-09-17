@@ -18,7 +18,20 @@
             
             for($i = 1; $i <= 5; $i++)
             {
-                $direction = random_int(0, 1);
+                $inputsOutputsHoursModel = new InputsOutputsHoursModel();
+                
+                $result = $inputsOutputsHoursModel->get_count_persons();
+                
+                $count_persons = (int)$result['count_persons'];
+                
+                if($count_persons > 0)
+                {
+                    $direction = random_int(0, 1);
+                }
+                else if ($count_persons == 0)
+                {
+                    $direction = 1;
+                }
 
                 $camera_number = random_int(1, 2);
 
@@ -29,6 +42,10 @@
                 ];
 
                 $builder->insert($data);
+                
+                $inputs_outputs_hours_model = new InputsOutputsHoursModel;
+            
+                $inputs_outputs_hours_model->agregate();
             }
         }
         

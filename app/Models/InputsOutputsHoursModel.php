@@ -38,21 +38,18 @@
                    
                    if(empty($result2))
                    {   
-                       $result3 = $this->get_count_input_output($row['date'], $row['hour'], 1);
+                        $result3 = $this->get_count_input_output($row['date'], $row['hour'], 1);
                        
-                       $result4 = $this->get_count_input_output($row['date'], $row['hour'], 0);
-                       
-                       if (!empty($result3))
-                       {        
-                            $data = [
-                                 'date' => $result3['date'],
-                                 'hour'  => $result3['hour'],
-                                 'input'  => $result3['count_input'],
-                                 'output' => $result4['count_output']
-                             ];
+                        $result4 = $this->get_count_input_output($row['date'], $row['hour'], 0);
+                              
+                        $data = [
+                             'date' => $result3['date'],
+                             'hour'  => $result3['hour'],
+                             'input'  => $result3['count_input'],
+                             'output' => $result4['count_output']
+                         ];
 
-                             $builder_inputs_outputs_hours->insert($data);
-                       }
+                         $builder_inputs_outputs_hours->insert($data);
                    }
                    else
                    {
@@ -111,6 +108,18 @@
             $query = $builder_inputs_outputs->get();
             
             $result = $query->getRowArray();
+            
+            if(empty($result))
+            {
+                if ($direction == 1)
+                {
+                    $result['count_input'] = 0;
+                }
+                else if ($direction == 0)
+                {
+                    $result['count_output'] = 0;
+                }
+            }
             
             return $result;
         }

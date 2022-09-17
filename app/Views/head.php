@@ -17,7 +17,6 @@
     <ul id="menu">
         <li><a href="/"<?php if(uri_string() == '/'): ?> class="active"<?php endif; ?>>Strona główna</a></li>
         <li><a href="zlicz-losowo-wejscia-wyjscia"<?php if(uri_string() == 'zlicz-losowo-wejscia-wyjscia'): ?> class="active"<?php endif; ?>>Zlicz losowo wejścia i wyjścia - cron</a></li>
-        <li><a href="agreguj-wejscia-wyjscia-godzinowo"<?php if(uri_string() == 'agreguj-wejscia-wyjscia-godzinowo'): ?> class="active"<?php endif; ?>>Agreguj wejścia i wyjścia według godzin - cron</a></li>
         <li><a href="wykres-statystyki"<?php if(uri_string() == 'wykres-statystyki'): ?> class="active"<?php endif; ?>>Wykres i statystyki</a></li>
     </ul>
 </div>

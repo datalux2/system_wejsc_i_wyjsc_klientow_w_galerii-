@@ -39,8 +39,6 @@ $routes->get('/', 'Home::index');
 
 $routes->get('/zlicz-losowo-wejscia-wyjscia','Cron::count_random_input_output');
 
-$routes->get('/agreguj-wejscia-wyjscia-godzinowo','Cron::agregate_input_output_hours');
-
 $routes->get('/wykres-statystyki','Statistics::chart_statistics');
 
 /*
