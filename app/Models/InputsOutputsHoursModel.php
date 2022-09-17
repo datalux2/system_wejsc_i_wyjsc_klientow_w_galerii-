@@ -43,8 +43,8 @@
                         $result4 = $this->get_count_input_output($row['date'], $row['hour'], 0);
                               
                         $data = [
-                             'date' => $result3['date'],
-                             'hour'  => $result3['hour'],
+                             'date' => $row['date'],
+                             'hour'  => $row['hour'],
                              'input'  => $result3['count_input'],
                              'output' => $result4['count_output']
                          ];
