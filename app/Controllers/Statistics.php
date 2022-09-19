@@ -1,5 +1,7 @@
 <?php
     namespace App\Controllers;
+    
+    use CodeIgniter\Controller;
 
     class Statistics extends BaseController
     {
@@ -23,7 +25,7 @@
             
             $get_count_persons = $inputs_outputs_hours_model->get_count_persons();
             
-            $chart_statistics = $inputs_outputs_hours_model->chart_statistics();
+            $days = $inputs_outputs_hours_model->get_days();
             
             return view('statistics/chart_statistics', [
                 'get_input_camera1' => $get_input_camera1,
@@ -33,8 +35,22 @@
                 'get_input_global' => $get_input_global,
                 'get_output_global' => $get_output_global,
                 'get_count_persons' => $get_count_persons,
-                'chart_statistics' => $chart_statistics
+                'days' => $days
             ]);
+        }
+        
+        public function get_chart_statistics_by_day()
+        {
+            if($this->request->getMethod() == 'post')
+            {
+                $day = $this->request->getPost('day');
+            
+                $inputs_outputs_hours_model = new \App\Models\InputsOutputsHoursModel;
+
+                $chart_statistics = $inputs_outputs_hours_model->get_chart_statistics_by_day($day);
+
+                return json_encode($chart_statistics);
+            }
         }
     }
 ?>

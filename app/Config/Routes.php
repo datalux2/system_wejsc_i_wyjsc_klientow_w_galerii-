@@ -41,6 +41,8 @@ $routes->get('/zlicz-losowo-wejscia-wyjscia','Cron::count_random_input_output');
 
 $routes->get('/wykres-statystyki','Statistics::chart_statistics');
 
+$routes->post('/pobierz-statystyki-wykresu-dzien','Statistics::get_chart_statistics_by_day');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

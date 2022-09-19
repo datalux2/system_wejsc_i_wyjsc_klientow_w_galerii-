@@ -103,19 +103,6 @@
             return $result;
         }
         
-        public function chart_statistics()
-        {
-            $builder = $this->db->table('inputs_outputs_hours');
-            
-            $builder->orderBy('date, hour');
-            
-            $query = $builder->get();
-            
-            $result = $query->getResultArray();
-            
-            return $result;
-        }
-        
         private function get_count_input_output($date, $hour, $direction)
         {
             $builder_inputs_outputs = $this->db->table('inputs_outputs');
@@ -141,6 +128,38 @@
                     $result['count_output'] = 0;
                 }
             }
+            
+            return $result;
+        }
+        
+        public function get_days()
+        {
+            $builder_inputs_outputs_hours = $this->db->table('inputs_outputs_hours');
+            
+            $builder_inputs_outputs_hours->select("DATE_FORMAT(date, '%d-%m-%Y') day, date");
+            
+            $builder_inputs_outputs_hours->distinct();
+            
+            $builder_inputs_outputs_hours->orderBy('date asc');
+            
+            $query = $builder_inputs_outputs_hours->get();
+            
+            $result = $query->getResultArray();
+            
+            return $result;
+        }
+        
+        public function get_chart_statistics_by_day($day)
+        {
+            $builder = $this->db->table('inputs_outputs_hours');
+            
+            $builder->where('date', $day);
+            
+            $builder->orderBy('date, hour');
+            
+            $query = $builder->get();
+            
+            $result = $query->getResultArray();
             
             return $result;
         }

@@ -90,3 +90,18 @@ body
   overflow: auto;
   visibility: visible;
 }
+
+#myTab, #myTabContent
+{
+    display: none;
+}
+
+#select_day
+{
+    margin-bottom: 20px;
+}
+
+#loader
+{
+    display: none;
+}

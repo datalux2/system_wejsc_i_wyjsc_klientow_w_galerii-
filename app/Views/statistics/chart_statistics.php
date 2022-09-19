@@ -2,18 +2,82 @@
     $dir = dirname(__FILE__, 2);
     include $dir . '/head.php';
 ?>
-<?php if(!empty($chart_statistics)): ?>
+<?php if(!empty($days)): ?>
+<div id="select_day">
+    <label>Wybierz dzień:</label>
+    <select id="select_day_selector">
+        <option value="0"></option>
+        <?php foreach ($days as $row): ?>
+        <option value="<?= $row['date'] ?>"><?= $row['day'] ?></option>
+        <?php endforeach; ?>
+    </select>
+    <img src="<?= base_url() ?>/img/loading.gif" id="loader" />
+</div>
 <script type="text/javascript">
-    google.charts.load('current', {'packages':['corechart', 'bar']});
-    google.charts.setOnLoadCallback(drawChart);
+    $('#select_day_selector').change(function() {
+        var day = $(this).val();
+        
+        if (day != '0')
+        {
+            $.ajax({
+                url: '<?= base_url() ?>/pobierz-statystyki-wykresu-dzien',
+                method: 'POST',
+                data: {day: day},
+                dataType: 'json',
+                error: function(jqXHR, errorThrown) {
+                    $('#loader').hide();
+                    alert('Błąd połączenia z siecią');
+                },
+                beforeSend: function(jqXHR, settings) {
+                    $('#loader').show();
+                },
+                success: function(chart_statistics, textStatus, jqXHR) {
+                    if ($.isArray(chart_statistics))
+                    {
+                        if(chart_statistics.length != 0)
+                        {
+                            var data_array = [];
+                            data_array.push(['Data i godzina', 'Ilość wejść', 'Ilość wyjść']);
+                            $.each(chart_statistics, function (index, value) {
+                                data_array.push([value['date'] + 'g. ' + value['hour'], parseInt(value['input']), parseInt(value['output'])]); 
+                            });
+                            
+                            google.charts.load('current', {'packages':['corechart', 'bar']});
+                            google.charts.setOnLoadCallback(function() {drawChart(data_array);});
+
+                            google.charts.setOnLoadCallback(function() {drawChart2(data_array);});
+                            
+                            $('#myTab').css('display', 'flex');
+                            $('#myTabContent').show();
+                        }
+                        else
+                        {
+                            $('#myTab').hide();
+                            $('#myTabContent').hide();
+                            alert('Brak danych');
+                        }
+                    }
+                    else
+                    {
+                        $('#myTab').hide();
+                        $('#myTabContent').hide();
+                        alert('Brak danych');
+                    }
+                    $('#loader').hide();
+                }
+            });
+        }
+        else
+        {
+            $('#myTab').hide();
+            $('#myTabContent').hide();
+            alert('Wybierz datę');
+        }
+    });
     
-    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Data i godzina', 'Ilość wejść', 'Ilość wyjść'],
-          <?php foreach($chart_statistics as $key => $row): ?>
-          ['<?=$row['date'] . ' g. ' . $row['hour']?>', <?=$row['input']?>, <?=$row['output']?>],
-          <?php endforeach; ?>
-        ]);
+    function drawChart(data_array)
+    {
+        var data = google.visualization.arrayToDataTable(data_array);
 
         var options = {
           title: 'Ilość wejść i wyjść według daty i godziny',
@@ -24,22 +88,17 @@
         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 
         chart.draw(data, options);
-      }
-      
-    google.charts.setOnLoadCallback(drawChart2);
-    function drawChart2() {
-      var data = google.visualization.arrayToDataTable([
-        ["Data i godzina", "Ilość wejść", "Ilość wyjść"],
-        <?php foreach($chart_statistics as $key => $row): ?>
-        ["<?=$row['date'] . ' g. ' . $row['hour']?>", <?=$row['input']?>, <?=$row['output']?>],
-        <?php endforeach; ?>
-      ]);
+    }
+    
+    function drawChart2(data_array)
+    {
+        var data = google.visualization.arrayToDataTable(data_array);
 
-      var options = {
-          chart: {
-            title: 'Ilość wejść i wyjść według daty i godziny',
-            subtitle: ''
-          }
+        var options = {
+            chart: {
+              title: 'Ilość wejść i wyjść według daty i godziny',
+              subtitle: ''
+            }
         };
 
         var chart = new google.charts.Bar(document.getElementById('chart_div2'));
