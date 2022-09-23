@@ -39,13 +39,13 @@
                             var data_array = [];
                             data_array.push(['Data i godzina', 'Ilość wejść', 'Ilość wyjść']);
                             $.each(chart_statistics, function (index, value) {
-                                data_array.push([value['date'] + 'g. ' + value['hour'], parseInt(value['input']), parseInt(value['output'])]); 
+                                data_array.push(['g. ' + value['hour'], parseInt(value['input']), parseInt(value['output'])]); 
                             });
                             
                             google.charts.load('current', {'packages':['corechart', 'bar']});
-                            google.charts.setOnLoadCallback(function() {drawChart(data_array);});
+                            google.charts.setOnLoadCallback(function() {drawChart(data_array, day);});
 
-                            google.charts.setOnLoadCallback(function() {drawChart2(data_array);});
+                            google.charts.setOnLoadCallback(function() {drawChart2(data_array, day);});
                             
                             $('#myTab').css('display', 'flex');
                             $('#myTabContent').show();
@@ -75,12 +75,15 @@
         }
     });
     
-    function drawChart(data_array)
+    function drawChart(data_array, day)
     {
         var data = google.visualization.arrayToDataTable(data_array);
+        
+        var dateAr = day.split('-');
+        var newDate = dateAr[2] + '-' + dateAr[1] + '-' + dateAr[0];
 
         var options = {
-          title: 'Ilość wejść i wyjść według daty i godziny',
+          title: 'Ilość wejść i wyjść według godziny dla daty ' + newDate,
           curveType: 'function',
           legend: { position: 'bottom' }
         };
@@ -90,13 +93,16 @@
         chart.draw(data, options);
     }
     
-    function drawChart2(data_array)
+    function drawChart2(data_array, day)
     {
         var data = google.visualization.arrayToDataTable(data_array);
+        
+        var dateAr = day.split('-');
+        var newDate = dateAr[2] + '-' + dateAr[1] + '-' + dateAr[0];
 
         var options = {
             chart: {
-              title: 'Ilość wejść i wyjść według daty i godziny',
+              title: 'Ilość wejść i wyjść według godziny dla daty ' + newDate,
               subtitle: ''
             }
         };
@@ -111,7 +117,7 @@
     <button class="nav-link active" id="chart-line-tab" data-bs-toggle="tab" data-bs-target="#chart-line" type="button" role="tab" aria-controls="chart-line" aria-selected="true">Wykres liniowy</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="chart-circle-tab" data-bs-toggle="tab" data-bs-target="#chart-circle" type="button" role="tab" aria-controls="chart-circle" aria-selected="false">Wykres kołowy</button>
+    <button class="nav-link" id="chart-circle-tab" data-bs-toggle="tab" data-bs-target="#chart-circle" type="button" role="tab" aria-controls="chart-circle" aria-selected="false">Wykres słupkowy</button>
   </li>
 </ul>
 <div class="tab-content" id="myTabContent">
